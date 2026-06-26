@@ -83,6 +83,16 @@
             label.appendChild(text);
             list.appendChild(label);
         });
+
+        var legend = document.getElementById('route-legend');
+        var toggle = document.getElementById('legend-toggle');
+        if (legend && toggle) {
+            toggle.addEventListener('click', function () {
+                legend.classList.toggle('collapsed');
+                toggle.textContent = legend.classList.contains('collapsed') ? '+' : '−';
+                toggle.setAttribute('aria-label', legend.classList.contains('collapsed') ? 'Afficher la légende' : 'Réduire la légende');
+            });
+        }
     }
 
     function patchFeaturePicking() {

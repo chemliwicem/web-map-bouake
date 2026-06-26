@@ -111,9 +111,14 @@
                 <div id="popup-content"></div>
             </div>
         </div>
-        <aside id="route-legend" class="route-legend" aria-label="Légende des lignes de parcours">
-            <h2>Lignes de parcours</h2>
-            <p>Cochez un parcours pour l’afficher et le rendre cliquable.</p>
+        <aside id="route-legend" class="route-legend collapsed" aria-label="Légende des lignes de parcours">
+            <div class="legend-header">
+                <div>
+                    <h2>Lignes de parcours</h2>
+                    <p>Cochez un parcours pour l’afficher et le rendre cliquable.</p>
+                </div>
+                <button id="legend-toggle" type="button" aria-label="Afficher la légende">+</button>
+            </div>
             <div id="route-list"></div>
         </aside>
         </div>
