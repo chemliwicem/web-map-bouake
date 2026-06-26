@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="./resources/ol.css">
+        <link rel="stylesheet" href="resources/fontawesome-all.min.css">
+        <link rel="stylesheet" type="text/css" href="resources/horsey.min.css">
+        <link rel="stylesheet" type="text/css" href="resources/ol-search-layer.min.css">
+        <link href="resources/photon-geocoder-autocomplete.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
+        <link rel="stylesheet" href="./resources/qgis2web.css">
+        <link rel="stylesheet" href="./pfe-custom.css">
+        <style>
+        html, body {
+            background-color: #071b33;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .ol-control > * {
+            background-color: #f8f8f8!important;
+            color: #444444!important;
+            border-radius: 0px;
+        }
+        .ol-attribution a, .gcd-gl-input::placeholder, .search-layer-input-search::placeholder {
+            color: #444444!important;
+        }
+        .search-layer-input-search {
+            background-color: #f8f8f8!important;
+        }
+        .ol-control > *:focus, .ol-control >*:hover {
+            background-color: rgba(248, 248, 248, 0.7)!important;
+        } 
+        .ol-control {
+            background-color: rgba(255,255,255,.4) !important;
+            padding: 2px !important;
+        } 
+        </style>
+
+        <style>
+        #map {
+            width: 100vw;
+            height: 100vh;
+        }
+        </style>
+        <title>Web Mapping - PFE CHEMLI Wicem</title>
+    </head>
+    <body>
+        <section id="home-screen" class="home-screen">
+            <div class="home-card">
+                <div class="institution-row">
+                    <img class="header-logo" src="./images/LOGO_UTM.png" alt="Logo Université de Tunis El Manar">
+                    <div>
+                        <h2>Ministère de l'Enseignement supérieur et de la Recherche</h2>
+                        <h3>Faculté des sciences de Tunis</h3>
+                        <p>Département : Géologie</p>
+                    </div>
+                    <img class="header-logo fst-logo" src="./images/LOGO_FST.png" alt="Logo Faculté des Sciences de Tunis">
+                </div>
+
+                <div class="home-main-grid">
+                    <div class="memoire-block">
+                        <p class="eyebrow">Mémoire</p>
+                        <p>Présenté en vue de l’obtention du diplôme de Mastère professionnel en Sciences Géomatiques</p>
+                        <p>Parcours : <strong>TOPOGRAPHIE ET PROJETS TERRITORIAUX</strong></p>
+                        <p class="student-label">Élaboré par :</p>
+                        <h1>CHEMLI WICEM</h1>
+                        <p class="subject-label">Intitulé</p>
+                        <h4>Web Mapping informatif du projet d’aménagement urbain de Bouaké</h4>
+                    </div>
+
+                    <figure class="interchange-figure">
+                        <img src="./images/ECHANGEUR_BOUAKE.png" alt="Vue de l'échangeur projeté au carrefour Bouaké">
+                        <figcaption>Échangeur projeté au carrefour Bouaké</figcaption>
+                    </figure>
+                </div>
+
+                <div class="project-description">
+                    <h3>Contexte du projet</h3>
+                    <p>Bouaké, deuxième agglomération de Côte d'Ivoire après Abidjan, constitue un carrefour stratégique situé au croisement des principaux axes routiers nationaux et sous-régionaux reliant Abidjan, Yamoussoukro, le Burkina Faso et le Mali. Forte de près d'un million d'habitants, la ville joue un rôle majeur dans les échanges commerciaux, le transport de marchandises et le développement agro-industriel.</p>
+                    <p>Cependant, la croissance démographique et l'augmentation continue du trafic entraînent une congestion importante sur plusieurs carrefours structurants, notamment au Carrefour Bouaké. Les temps de parcours peuvent y doubler, voire tripler, aux heures de pointe, générant des pertes économiques et une dégradation de la qualité de service.</p>
+                    <p>L'aménagement d'un échangeur dans le cadre du Projet de Transport Urbain d'Abidjan (PTUA Phase 2) vise à améliorer durablement la fluidité des déplacements, renforcer la sécurité routière et soutenir le développement économique régional.</p>
+                </div>
+
+                <div class="supervision-grid">
+                    <div>
+                        <span>Organisme d’accueil</span>
+                        <strong>STUDI INTERNATIONAL</strong>
+                    </div>
+                    <div>
+                        <span>Encadré par</span>
+                        <p>M. CHAÂBENI ANIS : Encadrant académique</p>
+                        <p>M. BEN HMIDA ANIS : Encadrant professionnel</p>
+                    </div>
+                </div>
+
+                <div class="home-footer">
+                    <span>Année Universitaire 2025/2026</span>
+                    <button id="enter-map" type="button">Accéder à la carte interactive</button>
+                </div>
+            </div>
+        </section>
+
+        <div id="map-shell">
+        <div id="map-title" class="map-title">Carte interactive de l'échangeur projeté au carrefour Bouaké</div>
+        <div id="map">
+            <div id="popup" class="ol-popup">
+                <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+                <div id="popup-content"></div>
+            </div>
+        </div>
+        <aside id="route-legend" class="route-legend" aria-label="Légende des lignes de parcours">
+            <h2>Lignes de parcours</h2>
+            <p>Cochez un parcours pour l’afficher et le rendre cliquable.</p>
+            <div id="route-list"></div>
+        </aside>
+        </div>
+        <script src="resources/qgis2web_expressions.js"></script>
+<script src="resources/proj4.js"></script>
+        <script>proj4.defs('EPSG:32630','+proj=utm +zone=30 +datum=WGS84 +units=m +no_defs');</script>
+        <script src="./resources/functions.js"></script>
+        <script src="./resources/ol.js"></script>
+        <script src="resources/horsey.min.js"></script>
+        <script src="resources/ol-search-layer.js"></script>
+        <script src="./resources/ol-layerswitcher.js"></script>
+        <script src="resources/photon-geocoder-autocomplete.min.js"></script>
+        <script src="layers/Limite_demprise_du_projet_1.js"></script><script src="layers/Chausse_projete_au_niveau_de_sol_2.js"></script><script src="layers/Trottoire_projet_3.js"></script><script src="layers/CHAUSSE_DENIV1_4.js"></script><script src="layers/CHAUSSE_DENIV2_5.js"></script><script src="layers/CHAUSSE_DENIV3_6.js"></script><script src="layers/Chausse_projete_dnivele_7.js"></script><script src="layers/Zone_prive_8.js"></script><script src="layers/Zone_verte_projete_9.js"></script><script src="layers/PEINTURE_HACHURE_10.js"></script><script src="layers/PEINTURE_LIGNE_ACCELER_11.js"></script><script src="layers/PEINTURE_LIGNE_AXE_12.js"></script><script src="layers/PEINTURE_LIGNE_CONTINU_13.js"></script><script src="layers/PEINTURE_LIGNE_PIETON_14.js"></script><script src="layers/PEINTURE_LIGNE_RIVE_15.js"></script><script src="layers/PEINTURE_LIGNE_STATIONNEMENT_16.js"></script><script src="layers/PEINTURE_LIGNE_ZEBRAGE_17.js"></script><script src="layers/Lignesdeparcours_18.js"></script>
+        <script src="styles/Limite_demprise_du_projet_1_style.js"></script><script src="styles/Chausse_projete_au_niveau_de_sol_2_style.js"></script><script src="styles/Trottoire_projet_3_style.js"></script><script src="styles/CHAUSSE_DENIV1_4_style.js"></script><script src="styles/CHAUSSE_DENIV2_5_style.js"></script><script src="styles/CHAUSSE_DENIV3_6_style.js"></script><script src="styles/Chausse_projete_dnivele_7_style.js"></script><script src="styles/Zone_prive_8_style.js"></script><script src="styles/Zone_verte_projete_9_style.js"></script><script src="styles/PEINTURE_HACHURE_10_style.js"></script><script src="styles/PEINTURE_LIGNE_ACCELER_11_style.js"></script><script src="styles/PEINTURE_LIGNE_AXE_12_style.js"></script><script src="styles/PEINTURE_LIGNE_CONTINU_13_style.js"></script><script src="styles/PEINTURE_LIGNE_PIETON_14_style.js"></script><script src="styles/PEINTURE_LIGNE_RIVE_15_style.js"></script><script src="styles/PEINTURE_LIGNE_STATIONNEMENT_16_style.js"></script><script src="styles/PEINTURE_LIGNE_ZEBRAGE_17_style.js"></script><script src="styles/Lignesdeparcours_18_style.js"></script>
+        <script src="./layers/layers.js" type="text/javascript"></script> 
+        <script src="./resources/Autolinker.min.js"></script>
+        <script src="./resources/qgis2web.js"></script>
+        <script src="./pfe-custom.js"></script>
+    </body>
+</html>
