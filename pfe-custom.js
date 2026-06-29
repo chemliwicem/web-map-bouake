@@ -95,6 +95,70 @@
         }
     }
 
+    function getInterchangeLayers() {
+        if (typeof group_group1 !== 'undefined') return [group_group1];
+
+        return [
+            typeof lyr_Limite_demprise_du_projet_1 !== 'undefined' ? lyr_Limite_demprise_du_projet_1 : null,
+            typeof lyr_Chausse_projete_au_niveau_de_sol_2 !== 'undefined' ? lyr_Chausse_projete_au_niveau_de_sol_2 : null,
+            typeof lyr_Trottoire_projet_3 !== 'undefined' ? lyr_Trottoire_projet_3 : null,
+            typeof lyr_CHAUSSE_DENIV1_4 !== 'undefined' ? lyr_CHAUSSE_DENIV1_4 : null,
+            typeof lyr_CHAUSSE_DENIV2_5 !== 'undefined' ? lyr_CHAUSSE_DENIV2_5 : null,
+            typeof lyr_CHAUSSE_DENIV3_6 !== 'undefined' ? lyr_CHAUSSE_DENIV3_6 : null,
+            typeof lyr_Chausse_projete_dnivele_7 !== 'undefined' ? lyr_Chausse_projete_dnivele_7 : null,
+            typeof lyr_Zone_prive_8 !== 'undefined' ? lyr_Zone_prive_8 : null,
+            typeof lyr_Zone_verte_projete_9 !== 'undefined' ? lyr_Zone_verte_projete_9 : null,
+            typeof lyr_PEINTURE_HACHURE_10 !== 'undefined' ? lyr_PEINTURE_HACHURE_10 : null,
+            typeof lyr_PEINTURE_LIGNE_ACCELER_11 !== 'undefined' ? lyr_PEINTURE_LIGNE_ACCELER_11 : null,
+            typeof lyr_PEINTURE_LIGNE_AXE_12 !== 'undefined' ? lyr_PEINTURE_LIGNE_AXE_12 : null,
+            typeof lyr_PEINTURE_LIGNE_CONTINU_13 !== 'undefined' ? lyr_PEINTURE_LIGNE_CONTINU_13 : null,
+            typeof lyr_PEINTURE_LIGNE_PIETON_14 !== 'undefined' ? lyr_PEINTURE_LIGNE_PIETON_14 : null,
+            typeof lyr_PEINTURE_LIGNE_RIVE_15 !== 'undefined' ? lyr_PEINTURE_LIGNE_RIVE_15 : null,
+            typeof lyr_PEINTURE_LIGNE_STATIONNEMENT_16 !== 'undefined' ? lyr_PEINTURE_LIGNE_STATIONNEMENT_16 : null,
+            typeof lyr_PEINTURE_LIGNE_ZEBRAGE_17 !== 'undefined' ? lyr_PEINTURE_LIGNE_ZEBRAGE_17 : null
+        ].filter(Boolean);
+    }
+
+    function setupInterchangeToggle() {
+        if (typeof map === 'undefined') return;
+
+        var layers = getInterchangeLayers();
+        if (!layers.length) return;
+
+        var container = document.getElementById('bottom-left-container') || map.getTargetElement();
+        var wrapper = document.createElement('div');
+        wrapper.className = 'interchange-toggle ol-unselectable ol-control';
+
+        var label = document.createElement('label');
+        label.className = 'interchange-toggle-label';
+
+        var checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = true;
+        checkbox.setAttribute('aria-label', "Afficher ou masquer l'am\u00e9nagement de l'\u00e9changeur");
+
+        var text = document.createElement('span');
+        text.textContent = "Afficher l'\u00e9changeur";
+
+        function setInterchangeVisibility(visible) {
+            layers.forEach(function (layer) {
+                layer.setVisible(visible);
+            });
+            wrapper.classList.toggle('is-hidden', !visible);
+            text.textContent = visible ? "Afficher l'\u00e9changeur" : "\u00c9changeur masqu\u00e9";
+            closePopupIfPossible();
+        }
+
+        checkbox.addEventListener('change', function () {
+            setInterchangeVisibility(checkbox.checked);
+        });
+
+        label.appendChild(checkbox);
+        label.appendChild(text);
+        wrapper.appendChild(label);
+        container.appendChild(wrapper);
+    }
+
     function patchFeaturePicking() {
         if (typeof map === 'undefined' || typeof lyr_Lignesdeparcours_18 === 'undefined') return;
 
@@ -118,6 +182,7 @@
         setupHomeScreen();
         setupRoutes();
         setupLegend();
+        setupInterchangeToggle();
         patchFeaturePicking();
     });
 })();
